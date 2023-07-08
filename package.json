@@ -1,0 +1,23 @@
+{
+  "name": "nbt-serializer",
+  "version": "1.0.0-beta",
+  "description": "NBT serializer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Con-JS-Development/NBT-Serializer.git"
+  },
+  "keywords": [
+    "nbt",
+    "serializer"
+  ],
+  "author": "conmaster2112",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Con-JS-Development/NBT-Serializer/issues"
+  },
+  "homepage": "https://github.com/Con-JS-Development/NBT-Serializer#readme"
+}
