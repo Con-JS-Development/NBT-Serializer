@@ -1,8 +1,9 @@
 {
   "name": "nbt-serializer",
-  "version": "1.0.0-beta",
+  "version": "1.0.0",
   "description": "NBT serializer",
   "main": "index.js",
+  "type":"module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -21,13 +21,14 @@ class Stream extends DataView{
     setOffset(num){
         if(num>this.byteLength) throw new EndOfStreamError("Offset cant be out of Stream.");
     }
-    static fromString(text, bufferLength = 32e+3, base=16){
+    static fromString(text, options,...params){
+        const {bufferLength = 32e+3, base=16}=options??{};
         const BYTES_PER_ELEMENT = base / 8, property ="setUint" + base;
         if(text.length * BYTES_PER_ELEMENT > bufferLength) throw new RangeError("Can't fit text to specified buffer, please increase buffer length");
         const typedArray = new DataView(new ArrayBuffer(bufferLength));
         if(!property in typedArray) throw new Error("Invalid base: " + base);
         for (let i = 0; i < text.length; i++) typedArray[property](i*BYTES_PER_ELEMENT,String.prototype.charCodeAt.call(text,i) - 1);
-        const a = new this(typedArray.buffer);
+        const a = new this(typedArray.buffer,...params);
         a.__size__ = text.length * BYTES_PER_ELEMENT;
         return a;
     }
@@ -43,7 +44,7 @@ class Stream extends DataView{
         return Stream.toString(this,base);
     }
 }
-class BinaryStreamWriter extends Stream{
+export class BinaryStreamWriter extends Stream{
     constructor(stream){
         if(typeof stream === "number") super(stream);
         else if(stream instanceof Stream) super(stream.buffer,stream.offset);
@@ -127,7 +128,7 @@ class BinaryStreamWriter extends Stream{
         return 8;
     }
 }
-class BinaryStreamReader extends Stream{
+export class BinaryStreamReader extends Stream{
     constructor(stream){
         if(typeof stream === "number") super(stream);
         else if(stream instanceof Stream) super(stream.buffer,stream.offset);
@@ -198,4 +199,4 @@ class BinaryStreamReader extends Stream{
         return v;
     }
 }
-class EndOfStreamError extends Error{}
+export class EndOfStreamError extends Error{}
