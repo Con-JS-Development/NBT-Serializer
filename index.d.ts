@@ -1,21 +1,21 @@
 type StringBase = 16|8|32;
 type IStreamType = number | number | {buffer: ArrayBuffer};
-class Stream extends DataView{
-    constructor(buffer: ArrayBuffer | number, offset = 0)
+declare class Stream extends DataView{
+    constructor(buffer: ArrayBuffer | number, offset?: number)
     protected __offset__: number
     readonly offset: number
     readonly size: number
     readonly EndOfStream: boolean
     setOffset(num: number): void
-    static fromString(text: string, options?: {bufferLength?: number, base?:StringBase},...params?: any): this
+    static fromString(text: string, options?: {bufferLength?: number, base?:StringBase},...params: any): Stream
     /**@param {Stream} stream @param {8|16|32} base*/
-    static toString(stream: Stream, base?: StringBase=16): string
-    toString(base?: StringBase = 16): string
+    static toString(stream: Stream, base?: StringBase): string
+    toString(base?: StringBase): string
 }
 export class BinaryStreamWriter extends Stream{
     constructor(stream: IStreamType)
-    writeBytes(buffer: ArrayBuffer,length=buffer.byteLength): number
-    writeString(text: string, base: StringBase = 8): number
+    writeBytes(buffer: ArrayBuffer,length?:number ): number
+    writeString(text: string, base?: StringBase): number
     writeByte(num: number): number
     writeUint8(num: number): number
     writeInt8(num: number): number
@@ -25,11 +25,12 @@ export class BinaryStreamWriter extends Stream{
     writeUint32(num: number): number
     writeFloat32(num: number): number
     writeFloat64(num: number): number
+    static fromString(text: string, options?: {bufferLength?: number, base?:StringBase},...params: any): BinaryStreamWriter
 }
 export class BinaryStreamReader extends Stream{
     constructor(stream: IStreamType)
-    readBytes(length=0): Uint8Array
-    readString(length=0, base = 8):string
+    readBytes(length?: number): Uint8Array
+    readString(length: number, base?: StringBase):string
     readByte():number
     readUint8():number
     readInt8():number
@@ -39,6 +40,7 @@ export class BinaryStreamReader extends Stream{
     readUint32():number
     readFloat32():number
     readFloat64():number
+    static fromString(text: string, options?: {bufferLength?: number, base?:StringBase},...params: any): BinaryStreamReader
 }
 export class EndOfStreamError extends Error{}
 export enum NBTTypes {
@@ -55,7 +57,7 @@ export enum NBTTypes {
     "Boolean"=10
 }
 export class NBTStreamWriter extends BinaryStreamWriter{
-    constructor(stream: IStreamType,options: object | NBTStreamWriter = new NBTWriterOptions())
+    constructor(stream: IStreamType, options?: object | NBTStreamWriter)
     protected __options__: NBTWriterOptions;
     writeTypedArray<t>(array: Array<t>): number
     writeBoolean(bool: boolean):number
@@ -64,9 +66,10 @@ export class NBTStreamWriter extends BinaryStreamWriter{
     writeCompoud(object: object): number
     writeEmpty(): number
     writeType(type: NBTTypes): number
+    static fromString(text: string, options?: {bufferLength?: number, base?:StringBase},...params: any): NBTStreamWriter
 }
 export class NBTStreamReader extends BinaryStreamReader{
-    constructor(stream: IStreamType, options: object | NBTReaderOptions = new NBTReaderOptions())
+    constructor(stream: IStreamType, options?: object | NBTReaderOptions)
     protected __options__: NBTReaderOptions;
     readTypedArray(): Array<any>
     readBoolean(): boolean
@@ -75,6 +78,7 @@ export class NBTStreamReader extends BinaryStreamReader{
     readCompoud(): object
     readEmpty(): undefined
     readType(): NBTTypes
+    static fromString(text: string, options?: {bufferLength?: number, base?:StringBase},...params: any): NBTStreamReader
 }
 export const NBT: {
     ReadNBT(stream: NBTStreamReader): any
@@ -111,7 +115,7 @@ export const defualtReaders: {
     [NBTTypes.Double]:ReaderCall,
     [NBTTypes.TypedArray]:ReaderCall
 }
-class NBTStreamOptions{
+declare class NBTStreamOptions{
     nbtTypes: object & NBTTypes
     getType:(data: any)=>NBTStreamOptions["nbtTypes"][keyof NBTStreamOptions["nbtTypes"]]
 }

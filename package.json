@@ -1,6 +1,6 @@
 {
   "name": "nbt-serializer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NBT serializer",
   "main": "index.js",
   "type":"module",
